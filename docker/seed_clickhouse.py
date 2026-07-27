@@ -28,5 +28,22 @@ statements = [
 for statement in statements:
     client.command(statement)
 
+# The "only if empty" test lives here rather than in the SQL: ClickHouse will
+# not read the target table from inside an INSERT ... SELECT, and the insert
+# silently adds nothing instead of failing.
 count = client.query("select count() from analytics.events").result_rows[0][0]
+if count == 0:
+    client.command(
+        """
+        insert into analytics.events (event_time, event_name, user_id, properties)
+        select
+          now64(3) - toIntervalHour(number % 72),
+          ['page_view', 'signup', 'purchase', 'error'][(number % 4) + 1],
+          concat('user-', toString(number % 40)),
+          '{}'
+        from numbers(400)
+        """
+    )
+    count = client.query("select count() from analytics.events").result_rows[0][0]
+
 print(f"[bootstrap] analytics.events holds {count} rows")

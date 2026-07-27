@@ -13,13 +13,3 @@ create table if not exists analytics.events
 engine = MergeTree
 partition by toYYYYMM(event_time)
 order by (event_name, event_time);
-
--- A handful of rows so a fresh deployment has something to draw.
-insert into analytics.events (event_time, event_name, user_id, properties)
-select
-  now64(3) - toIntervalHour(number % 72),
-  ['page_view', 'signup', 'purchase', 'error'][(number % 4) + 1],
-  concat('user-', toString(number % 40)),
-  '{}'
-from numbers(400)
-where (select count() from analytics.events) = 0;
