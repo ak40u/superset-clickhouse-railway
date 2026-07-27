@@ -51,6 +51,13 @@ with app.app_context():
 PY
 fi
 
+if [ -n "${CLICKHOUSE_URI:-}" ] && [ "${SEED_EXAMPLE_DATA:-true}" = "true" ]; then
+  echo "[bootstrap] seeding the example events table"
+  # Idempotent by construction: create-if-not-exists, and the insert only fires
+  # when the table is empty, so a redeploy does not multiply the rows.
+  python /app/seed_clickhouse.py || echo "[bootstrap] seeding skipped"
+fi
+
 echo "[bootstrap] starting the web server on ${PORT:-8088}"
 # 0.0.0.0, not ::. Gunicorn would bind an IPv6 socket exclusively and the
 # platform's HTTP proxy, which connects over IPv4, would get a refused

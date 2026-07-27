@@ -16,6 +16,8 @@ RUN VENV_SITE="$(ls -d /app/.venv/lib/python*/site-packages)" \
 
 COPY docker/superset_config.py /app/pythonpath/superset_config.py
 COPY docker/bootstrap.sh /app/bootstrap.sh
+COPY docker/seed_clickhouse.py /app/seed_clickhouse.py
+COPY clickhouse/init-events.sql /app/init-events.sql
 RUN chmod +x /app/bootstrap.sh && chown superset /app/bootstrap.sh
 
 USER superset
