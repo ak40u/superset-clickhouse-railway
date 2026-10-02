@@ -19,11 +19,12 @@ client = clickhouse_connect.get_client(
     database="default",
 )
 
-statements = [
-    s.strip()
-    for s in re.split(r";\s*\n", open("/app/init-events.sql").read())
-    if s.strip() and not s.strip().startswith("--")
-]
+# Comment lines are dropped before splitting: the file opens with a comment
+# block, and a statement that follows one must not be discarded with it.
+sql = "\n".join(
+    line for line in open("/app/init-events.sql").read().splitlines() if not line.lstrip().startswith("--")
+)
+statements = [s.strip() for s in re.split(r";\s*\n", sql) if s.strip()]
 
 for statement in statements:
     client.command(statement)

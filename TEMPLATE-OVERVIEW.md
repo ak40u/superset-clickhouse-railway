@@ -22,7 +22,7 @@ On top of that, Superset needs a metadata database, a secret key, an admin creat
 
 ### Deployment Dependencies
 
-- [Apache Superset](https://superset.apache.org) 5.0.0 with `clickhouse-connect`
+- [Apache Superset](https://superset.apache.org) 6.1.0 with `clickhouse-connect`
 - [ClickHouse](https://clickhouse.com) 26.5.6 — the warehouse
 - Postgres — Superset's metadata, deliberately separate from the warehouse
 - Redis — chart, filter and form-data caches

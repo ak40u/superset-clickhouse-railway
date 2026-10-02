@@ -21,7 +21,7 @@ redeploy does not recreate the admin or duplicate the connection.
 
 ## What you get
 
-- **Superset 5.0.0** with `clickhouse-connect` installed.
+- **Superset 6.1.0** with `clickhouse-connect` installed.
 - **A ClickHouse warehouse**, already registered as a database connection named
   `ClickHouse` — visible in the UI, usable in SQL Lab.
 - **An `analytics.events` table** with a few hundred rows, so there is something
